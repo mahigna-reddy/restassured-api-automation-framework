@@ -1,151 +1,80 @@
-# RestAssured API Automation Framework
+# Client API Integration & Validation Support
 
-This project is a RestAssured API automation framework built using Java, TestNG, Maven, and reusable payload classes. It automates API test scenarios on the Restful Booker public API.
+## Project Overview
 
-The goal of this project is to demonstrate how API automation can be structured using reusable request payloads, endpoint routes, base setup, and TestNG assertions.
+This project focuses on validating API-driven business workflows from a Business Analyst and UAT perspective. The goal is to ensure that client integration APIs handle request payloads, response data, authentication, error scenarios, and HTTP status codes correctly before release.
 
-## Application Under Test
+The project includes business documentation, API validation scenarios, UAT coverage, defect tracking approach, and supporting automation using RestAssured.
 
-Restful Booker API: https://restful-booker.herokuapp.com/apidoc/index.html
+## Business Problem
 
-## Tech Stack
+Client-facing integrations depend on accurate API behavior for successful data exchange between systems. Any issues with required fields, authentication, response codes, error messages, or payload structure can delay onboarding and impact downstream business workflows.
 
-* Java
-* RestAssured
-* TestNG
-* Maven
-* Jackson Databind
-* JSON Schema Validator
-* IntelliJ IDEA
-* GitHub
+The business needed a clear validation approach to confirm that API behavior matched documented requirements before client onboarding and production release.
 
-## Framework Design
+## Role & Responsibilities
 
-This project follows a clean API automation structure:
+As a Business Analyst / API Integration Analyst, responsibilities included:
 
-* **BaseTest**: Handles common RestAssured base URI setup.
-* **Routes**: Stores reusable API endpoints such as auth, booking, and booking by ID.
-* **Payload Classes**: Uses Java classes to create reusable request bodies.
-* **TestNG**: Used for test execution and assertions.
-* **RestAssured**: Used for sending API requests and validating responses.
-* **Maven**: Used for dependency management and test execution.
+- Reviewed API requirements and business rules for client integration workflows
+- Analyzed request and response payloads to confirm required fields and expected behavior
+- Documented positive and negative API scenarios for UAT and validation
+- Created user stories and acceptance criteria for API integration workflows
+- Reviewed authentication, error handling, and HTTP status code behavior
+- Maintained requirement traceability between API requirements, test scenarios, and defects
+- Supported defect triage by documenting expected vs actual API responses
+- Coordinated with QA and development teams to validate fixes and support release readiness
 
-## Automated API Test Coverage
+- ## Sample User Stories
 
-The framework currently covers key Restful Booker API flows:
+### User Story 1: Submit Valid API Request
+As a client system, I want to submit a valid API request so that data can be processed successfully.
 
-* Create booking using POST API
-* Create booking and retrieve it using GET API
-* Generate authentication token
-* Fully update booking using PUT API
-* Partially update booking using PATCH API
-* Delete booking using DELETE API
-* Verify deleted booking returns 404 using GET API
+**Acceptance Criteria:**
+- API should accept valid request payloads
+- Required fields should be validated
+- API should return a successful response code
+- Response body should include expected confirmation details
 
-## Project Structure
+### User Story 2: Handle Invalid Payload
+As a client system, I want the API to return clear error messages for invalid payloads so that integration issues can be corrected quickly.
 
-```text
-restassured-api-automation-framework
-├── src
-│   └── test
-│       └── java
-│           ├── base
-│           │   └── BaseTest.java
-│           ├── endpoints
-│           │   └── Routes.java
-│           ├── payloads
-│           │   ├── AuthPayload.java
-│           │   ├── Booking.java
-│           │   └── BookingDates.java
-│           ├── tests
-│           │   └── BookingTests.java
-│           └── utils
-├── pom.xml
-└── README.md
-```
+**Acceptance Criteria:**
+- API should reject missing required fields
+- API should return appropriate error status codes
+- Error message should clearly describe the issue
+- Invalid data should not be processed
 
-## Key Features
+### User Story 3: Validate Authentication
+As a client system, I want secure API authentication so that only authorized users can access integration endpoints.
 
-* API automation using RestAssured
-* TestNG-based test execution
-* Maven-based dependency management
-* Reusable route management using `Routes`
-* Reusable request bodies using payload classes
-* Auth token generation for protected APIs
-* CRUD API validation: POST, GET, PUT, PATCH, DELETE
-* Status code validation
-* Response body validation using JsonPath
-* Request and response logging using RestAssured logs
+**Acceptance Criteria:**
+- API should reject requests without valid authentication
+- API should return an unauthorized status code for invalid credentials
+- API should process requests only when valid authentication is provided
 
-## API Scenarios Covered
+- ## UAT Scenarios
 
-### Create Booking
+| Scenario ID | UAT Scenario | Expected Result | Priority |
+|---|---|---|---|
+| UAT-001 | Submit API request with valid payload | API returns successful response | High |
+| UAT-002 | Submit request with missing required field | API returns validation error | High |
+| UAT-003 | Submit request with invalid data type | API returns appropriate error message | Medium |
+| UAT-004 | Submit request without authentication | API returns unauthorized error | High |
+| UAT-005 | Submit request with invalid token | API rejects the request | High |
+| UAT-006 | Validate response field values | Response matches expected business rules | High |
+| UAT-007 | Validate error handling | Error response is clear and consistent | Medium |
+| UAT-008 | Validate API status codes | Status codes match expected outcomes | High |
 
-Creates a new booking using POST `/booking` and validates booking ID, first name, and last name.
+## Requirement Traceability Matrix
 
-### Get Booking by ID
-
-Creates a booking, extracts the booking ID, retrieves the booking using GET `/booking/{id}`, and validates the saved booking details.
-
-### Update Booking
-
-Creates a booking, generates an auth token, updates the full booking using PUT `/booking/{id}`, and validates the updated response.
-
-### Partial Update Booking
-
-Creates a booking, generates an auth token, partially updates selected fields using PATCH `/booking/{id}`, and validates that updated and unchanged fields are handled correctly.
-
-### Delete Booking
-
-Creates a booking, generates an auth token, deletes the booking using DELETE `/booking/{id}`, and verifies the deleted booking returns 404 when retrieved again.
-
-## How to Run Tests
-
-Clone the repository:
-
-```bash
-git clone https://github.com/mahigna-reddy/restassured-api-automation-framework.git
-```
-
-Go to the project folder:
-
-```bash
-cd restassured-api-automation-framework
-```
-
-Run tests using Maven:
-
-```bash
-mvn clean test
-```
-
-## What I Practiced
-
-Through this project, I practiced:
-
-* Creating API automation tests using RestAssured
-* Structuring an API automation framework
-* Managing reusable API routes
-* Creating reusable request payload classes
-* Sending POST, GET, PUT, PATCH, and DELETE requests
-* Generating and using authentication tokens
-* Validating status codes and response bodies
-* Extracting response values using JsonPath
-* Chaining API flows such as create, retrieve, update, and delete
-* Running API tests using TestNG and Maven
-
-## Future Enhancements
-
-Planned improvements for this framework:
-
-* Add `config.properties` for environment-based configuration
-* Add reusable API utility methods
-* Add response schema validation
-* Add negative API test scenarios
-* Add data-driven API tests
-* Add Extent Reports or Allure Reports
-* Add GitHub Actions for CI execution
-
-## Author
-
-Mahigna Reddy
+| Requirement ID | Requirement | User Story | UAT Scenario | Status |
+|---|---|---|---|---|
+| REQ-001 | API should accept valid payloads | US-001 | UAT-001 | Passed |
+| REQ-002 | API should validate required fields | US-002 | UAT-002 | Passed |
+| REQ-003 | API should reject invalid data types | US-002 | UAT-003 | Passed |
+| REQ-004 | API should enforce authentication | US-003 | UAT-004 | Passed |
+| REQ-005 | API should reject invalid tokens | US-003 | UAT-005 | Passed |
+| REQ-006 | API response should match business rules | US-001 | UAT-006 | Passed |
+| REQ-007 | API should return clear error messages | US-002 | UAT-007 | Passed |
+| REQ-008 | API should return correct status codes | US-001 | UAT-008 | Passed |
